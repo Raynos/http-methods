@@ -1,10 +1,10 @@
-# routil-methods [![build status][1]][2]
+# http-methods [![build status][1]][2]
 
 Handle multiple methods elegantly
 
 ## Example
 
-    var methods = require("routil-methods")()
+    var methods = require("http-methods")
         , http = require("http")
 
     http.createServer(methods({
@@ -14,11 +14,11 @@ Handle multiple methods elegantly
 
 ## Installation
 
-`npm install routil-methods`
+`npm install http-methods`
 
 ## Tests
 
-`make test`
+`npm test`
 
 ## Contributors
 
@@ -26,5 +26,5 @@ Handle multiple methods elegantly
 
 ## MIT Licenced
 
-  [1]: https://secure.travis-ci.org/Raynos/routil-methods.png
-  [2]: http://travis-ci.org/Raynos/routil-methods
+  [1]: https://secure.travis-ci.org/Raynos/http-methods.png
+  [2]: http://travis-ci.org/Raynos/http-methods
