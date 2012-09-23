@@ -1,61 +1,44 @@
-var contentTypes = require("routil-contenttypes")
-    , ErrorPage = require("error-page")
-    , partial = require("ap").partial
-    , extend = require("xtend")
-    , body = require("routil-body")()
-    , defaults = {
-        errorPage: ErrorPage
-        , jsonBody: body.jsonBody
-        , formBody: body.formBody
-    }
-    , slice = Array.prototype.slice
+var contentTypes = require("content-types")
+    , body = require("body")
+    , jsonBody = body.json
+    , formBody = body.form
 
-module.exports = Methods
+module.exports = methods
 
-function Methods(options) {
-    return partial(methods, extend({}, defaults, options || {}))
-}
+function methods(routes, handleHttpForms) {
+    return handleHttpForms ? formRequestHandler : requestHandler
 
-function methods(options, routes, handleHttpForms) {
-    if (handleHttpForms) {
-        return partial(httpFormsRequestHandler, options, routes)
+    function requestHandler(req) {
+        var method = req.method
+            , f = routes[method] || routes.notFound || notFound
+
+        return f.apply(this, arguments)
     }
 
-    return partial(requestHandler, options, routes)
-}
+    function formRequestHandler(req, res) {
+        var args = arguments
+            , self = this
 
-function requestHandler(options, routes, req, res) {
-    var method = req.method
-        , f = routes[method]
+        contentTypes(req, res, {
+            "application/json": jsonBody
+            , "application/x-www-form-urlencoded": formBody
+            , "default": callRequestHandler
+        })(req, res, extractMethod)
 
-    if (f) {
-        return f.apply(this, slice.call(arguments, 2))
-    }
-    options.errorPage(req, res)(405)
-}
+        function callRequestHandler() {
+            requestHandler.apply(self, args)
+        }
 
-function httpFormsRequestHandler(options, routes, req, res) {
-    if (req.method !== "POST") {
-        return requestHandler.apply(this, arguments)
-    }
+        function extractMethod(err, body) {
+            var method = body._method
+                , f = routes[method] || routes.notFound || notFound
 
-    var args = slice.call(arguments, 2)
-        , self = this
-
-    contentTypes(req, {
-        "applications/json": options.jsonBody
-        , "application/x-www-form-urlencoded": options.formBody
-        , "default": partial(requestHandler, options, routes)
-    })(req, res, extractMethod)
-
-
-    function extractMethod(body) {
-        var method = body._method
-            , f = routes[method]
-
-        if (f) {
             return f.apply(self, args)
         }
-        options.errorPage(req, res)(405)
     }
+}
+
+function notFound(req, res) {
+    res.statusCode = 405
+    res.end("405 Method Not Allowed " + req.url)
 }

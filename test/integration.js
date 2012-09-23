@@ -1,15 +1,14 @@
 var test = require("tap").test
-    , methods = require("..")()
+    , methods = require("..")
     , testServer = require("test-server")
-    , partial = require("ap").partial
 
 testServer(handleRequest, startTests)
 
 function handleRequest(req, res) {
-    var get = partial(endValue, "get")
-        , post = partial(endValue, "post")
-        , put = partial(endValue, "put")
-        , del = partial(endValue, "del")
+    var get = endValue("get")
+        , post = endValue("post")
+        , put = endValue("put")
+        , del = endValue("del")
 
     if (req.url === "/form") {
         return methods({
@@ -27,38 +26,38 @@ function handleRequest(req, res) {
     }).apply(this, arguments)
 }
 
-function endValue(value, req, res) {
-    res.end(value)
+function endValue(value) {
+    return function (req, res) { res.end(value) }
 }
 
 function startTests(request, done) {
     test("get", function (t) {
-        request("/", partial(testMethod, "get", t))
+        request("/", testMethod("get", t))
     })
 
     test("post", function (t) {
         request({
             uri: "/"
             , method: "POST"
-        }, partial(testMethod, "post", t))
+        }, testMethod("post", t))
     })
 
     test("put", function (t) {
         request({
             uri: "/"
             , method: "PUT"
-        }, partial(testMethod, "put", t))
+        }, testMethod("put", t))
     })
 
     test("form get", function (t) {
-        request("/form", partial(testMethod, "get", t))
+        request("/form", testMethod("get", t))
     })
 
     test("form post", function (t) {
         request({
             uri: "/form"
             , method: "POST"
-        }, partial(testMethod, "post", t))
+        }, testMethod("post", t))
     })
 
     test("form put", function (t) {
@@ -68,7 +67,7 @@ function startTests(request, done) {
             , form: {
                 _method: "PUT"
             }
-        }, partial(testMethod, "put", t))
+        }, testMethod("put", t))
     })
 
     test("form delete", function (t) {
@@ -78,7 +77,7 @@ function startTests(request, done) {
             , form: {
                 _method: "DELETE"
             }
-        }, partial(testMethod, "del", t))
+        }, testMethod("del", t))
     })
 
     test("error", function (t) {
@@ -87,7 +86,7 @@ function startTests(request, done) {
             , method: "DELETE"
         }, function (err, res, body) {
             t.equal(res.statusCode, 405)
-            t.equal(body, "405 Method Not Allowed /\n")
+            t.equal(body, "405 Method Not Allowed /")
 
             t.end()
         })
@@ -96,8 +95,10 @@ function startTests(request, done) {
     .on("end", done)
 }
 
-function testMethod(value, t, err, res, body) {
-    t.equal(body, value)
+function testMethod(value, t) {
+    return function (err, res, body) {
+        t.equal(body, value)
 
-    t.end()
+        t.end()
+    }
 }

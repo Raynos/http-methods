@@ -1,27 +1,24 @@
 {
-  "name": "routil-methods",
+  "name": "method",
   "version": "0.0.1",
   "description": "Handle multiple methods elegantly",
   "keywords": [],
   "author": "Raynos <raynos2@gmail.com>",
-  "repository": "git://github.com/Raynos/routil-methods.git",
+  "repository": "git://github.com/Raynos/method.git",
   "main": "index",
-  "homepage": "https://github.com/Raynos/routil-methods",
+  "homepage": "https://github.com/Raynos/method",
   "contributors": [
     {
       "name": "Jake Verbaten"
     }
   ],
   "bugs": {
-    "url": "https://github.com/Raynos/routil-methods/issues",
+    "url": "https://github.com/Raynos/method/issues",
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "routil-body": "0.0.2",
-    "ap": "~0.1.0",
-    "xtend": "~1.0.3",
-    "error-page": "0.0.4",
-    "routil-contenttypes": "0.0.1"
+    "content-types": "~0.1.0",
+    "body": "~0.1.0"
   },
   "devDependencies": {
     "tap": "0.2.5",
@@ -30,10 +27,10 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/Raynos/routil-methods/raw/master/LICENSE"
+      "url": "http://github.com/Raynos/method/raw/master/LICENSE"
     }
   ],
   "scripts": {
-    "test": "make node-test"
+    "test": "tap --stderr --tap ./test"
   }
 }
