@@ -1,9 +1,8 @@
 'use strict';
 
 var contentTypes = require('content-types');
-var body = require('body');
-var jsonBody = body.json;
-var formBody = body.form;
+var jsonBody = require('body').json;
+var formBody = require('body').form;
 
 module.exports = FormRequestHandler;
 
