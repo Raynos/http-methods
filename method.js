@@ -3,6 +3,10 @@
 module.exports = MethodRequestHandler;
 
 function MethodRequestHandler(methods) {
+    if (methods === null || typeof methods !== 'object') {
+        throw new Error('methods must be an object');
+    }
+
     return function methodRequestHandler(req, res, opts, cb) {
         if (typeof cb !== 'function') {
             throw new Error('callback required');

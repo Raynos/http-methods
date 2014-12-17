@@ -30,6 +30,12 @@ function handleRequest(req, res) {
         } catch (err) {
             return sendError(err);
         }
+    } else if (req.url === '/empty-arg') {
+        try {
+            methods().call(this, req, res);
+        } catch (err) {
+            return sendError(err);
+        }
     }
 
     methods({
@@ -57,6 +63,17 @@ function startTests(request, done) {
 
             t.equal(res.statusCode, 500);
             t.equal(res.body, 'callback required');
+
+            t.end();
+        })
+    })
+
+    test('throws without opts', function (t) {
+        request('/empty-arg', function (err, res, body) {
+            t.ifError(err);
+
+            t.equal(res.statusCode, 500);
+            t.equal(res.body, 'methods must be an object');
 
             t.end();
         })
