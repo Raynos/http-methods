@@ -20,7 +20,7 @@ function MethodRequestHandler(methods) {
 }
 
 function notFound(req, res, opts, cb) {
-    var err = new Error('405 Method Not Allowed ' + req.url);
+    var err = new Error('405 Method Not Allowed');
     err.statusCode = 405;
 
     return cb(err);

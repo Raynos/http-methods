@@ -134,7 +134,7 @@ function startTests(request, done) {
             , method: 'DELETE'
         }, function (err, res, body) {
             t.equal(res.statusCode, 405)
-            t.equal(body, '405 Method Not Allowed /')
+            t.equal(body, '405 Method Not Allowed')
 
             t.end()
         })
