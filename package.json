@@ -1,6 +1,6 @@
 {
   "name": "http-methods",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Handle multiple methods elegantly",
   "keywords": [],
   "author": "Raynos <raynos2@gmail.com>",
